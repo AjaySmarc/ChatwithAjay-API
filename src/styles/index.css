@@ -1,0 +1,100 @@
+/* src/styles/index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global Transition and Smooth Scrolling */
+html {
+  @apply scroll-smooth antialiased;
+}
+
+body {
+  @apply 
+    bg-white 
+    text-gray-900 
+    dark:bg-gray-900 
+    dark:text-gray-100 
+    transition-colors 
+    duration-300 
+    ease-in-out 
+    selection:bg-blue-500 
+    selection:text-white;
+}
+
+/* Enhanced Scrollbar Styling */
+::-webkit-scrollbar {
+  @apply 
+    w-3 
+    bg-gray-100 
+    dark:bg-gray-800;
+}
+
+::-webkit-scrollbar-track {
+  @apply 
+    bg-gray-50 
+    dark:bg-gray-900 
+    rounded-full;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply 
+    bg-gray-300 
+    dark:bg-gray-600 
+    rounded-full 
+    hover:bg-gray-400 
+    dark:hover:bg-gray-500 
+    transition-colors;
+}
+
+/* Focus States */
+*:focus {
+  @apply 
+    outline-none 
+    ring-2 
+    ring-blue-500 
+    ring-opacity-50;
+}
+
+/* Reduce Motion Preference */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    @apply transition-none;
+  }
+}
+
+/* Accessibility Enhancements */
+::selection {
+  @apply 
+    bg-blue-500 
+    text-white 
+    bg-opacity-80;
+}
+
+/* Typography Base */
+p, span, div {
+  @apply 
+    leading-relaxed 
+    tracking-normal;
+}
+
+/* Input and Form Elements */
+input, textarea, button, select {
+  @apply 
+    transition-all 
+    duration-200 
+    ease-in-out 
+    focus:border-blue-500 
+    focus:ring-2 
+    focus:ring-blue-300 
+    dark:focus:ring-blue-700;
+}
+
+/* Subtle Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
