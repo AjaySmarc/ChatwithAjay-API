@@ -1,5 +1,4 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-require('dotenv').config();
 
 class GeminiService {
   constructor() {
