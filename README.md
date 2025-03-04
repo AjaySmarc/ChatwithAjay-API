@@ -1,4 +1,4 @@
-# ChatwithAjay is a CHATBOT !
+# ChatwithAjay is a CHATBOT using REACT and API!
 
 ![image](https://github.com/user-attachments/assets/c124595c-a5d1-4074-a377-37a9b77b2c10)
 
