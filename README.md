@@ -1,4 +1,7 @@
-# Gemini AI Q&A Web App
+# ChatwithAjay is a CHATBOT !
+
+![image](https://github.com/user-attachments/assets/c124595c-a5d1-4074-a377-37a9b77b2c10)
+
 
 ## Features
 - AI-powered question answering
