@@ -6,3 +6,4 @@ build/
 .idea/
 *.sublime-workspace
 
+node_modules
