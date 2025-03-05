@@ -33,7 +33,7 @@ class GeminiService {
       
       const result = await model.generateContent(question);
       const response = result.response;
-      const text = response.text();
+      const text = await response.text();
       
       return {
         success: true,
@@ -87,7 +87,7 @@ class GeminiService {
       });
 
       const response = result.response;
-      const text = response.text();
+      const text = await response.text();
       
       return {
         success: true,
@@ -145,4 +145,5 @@ class GeminiService {
   }
 }
 
-export default new GeminiService();
+const geminiServiceInstance = new GeminiService();
+export default geminiServiceInstance;
