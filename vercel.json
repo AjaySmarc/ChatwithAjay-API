@@ -4,7 +4,7 @@
     {
       "src": "package.json",
       "use": "@vercel/static-build",
-      "config": { "distDir": "build" }
+      "config": { "zeroConfig": true }
     }
   ],
   "routes": [
@@ -12,6 +12,5 @@
       "src": "/(.*)",
       "dest": "/index.html"
     }
-  ],
-  "buildCommand": "chmod +x node_modules/.bin/react-scripts && npm run build"
+  ]
 }
