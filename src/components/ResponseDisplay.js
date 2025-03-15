@@ -5,12 +5,14 @@ import { materialLight, materialDark } from 'react-syntax-highlighter/dist/esm/s
 const ResponseDisplay = ({ conversation, isLoading, isDarkMode }) => {
   const containerRef = useRef(null);
 
+  // Auto-scroll to the bottom when new responses are added
   useEffect(() => {
     if (containerRef.current) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
   }, [conversation, isLoading]);
 
+  // Copy text to clipboard
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
     const copyButton = event.target;
@@ -20,6 +22,7 @@ const ResponseDisplay = ({ conversation, isLoading, isDarkMode }) => {
     }, 2000);
   };
 
+  // Parse text for code blocks
   const parseCodeBlocks = (text) => {
     const codeBlockRegex = /```(\w+)?\n([\s\S]*?)```/g;
     const parts = [];
@@ -42,7 +45,7 @@ const ResponseDisplay = ({ conversation, isLoading, isDarkMode }) => {
   };
 
   return (
-    <div ref={containerRef} className="pt-4 pb-16 px-4 overflow-y-auto max-h-screen">
+    <div ref={containerRef} className="pt-4 pb-24 px-4 overflow-y-auto max-h-[calc(100vh-150px)]">
       {conversation.map((entry, index) => (
         <div key={index} className="bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden mb-4">
           <div className="bg-blue-50 dark:bg-blue-900 p-4 border-b">
