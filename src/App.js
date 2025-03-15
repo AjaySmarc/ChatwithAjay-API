@@ -17,9 +17,9 @@ function App() {
     <ThemeProvider>
       <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
         <Navbar />
-        <div className="flex justify-center">
-          <img src="/Email Marketing.gif" alt="My GIF" width="300" />
-        </div>
+       // <div className="flex justify-center">
+          //<img src="/Email Marketing.gif" alt="My GIF" width="300" />
+       // </div>
 
         
         <div className="container mx-auto px-4 py-8">
