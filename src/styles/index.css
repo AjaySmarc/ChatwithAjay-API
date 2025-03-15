@@ -1,100 +1,122 @@
 /* src/styles/index.css */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* src/styles/index.css */  
+@tailwind base;  
+@tailwind components;  
+@tailwind utilities;  
 
-/* Global Transition and Smooth Scrolling */
-html {
-  @apply scroll-smooth antialiased;
-}
+/* Global Transition and Smooth Scrolling */  
+html {  
+  @apply scroll-smooth antialiased;  
+}  
 
-body {
-  @apply 
-    bg-white 
-    text-gray-900 
-    dark:bg-gray-900 
-    dark:text-gray-100 
-    transition-colors 
-    duration-300 
-    ease-in-out 
-    selection:bg-blue-500 
-    selection:text-white;
-}
+body {  
+  @apply   
+    bg-white   
+    text-gray-900   
+    dark:bg-gray-900   
+    dark:text-gray-100   
+    transition-colors   
+    duration-300   
+    ease-in-out   
+    selection:bg-blue-500   
+    selection:text-white;  
+}  
 
-/* Enhanced Scrollbar Styling */
-::-webkit-scrollbar {
-  @apply 
-    w-3 
-    bg-gray-100 
-    dark:bg-gray-800;
-}
+/* Responsive Scrollbar Styling */  
+::-webkit-scrollbar {  
+  @apply w-2 md:w-3 bg-gray-100 dark:bg-gray-800;  
+}  
 
-::-webkit-scrollbar-track {
-  @apply 
-    bg-gray-50 
-    dark:bg-gray-900 
-    rounded-full;
-}
+::-webkit-scrollbar-track {  
+  @apply bg-gray-50 dark:bg-gray-900 rounded-full;  
+}  
 
-::-webkit-scrollbar-thumb {
-  @apply 
-    bg-gray-300 
-    dark:bg-gray-600 
-    rounded-full 
-    hover:bg-gray-400 
-    dark:hover:bg-gray-500 
-    transition-colors;
-}
+::-webkit-scrollbar-thumb {  
+  @apply   
+    bg-gray-300 dark:bg-gray-600 rounded-full   
+    hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors;  
+}  
 
-/* Focus States */
-*:focus {
-  @apply 
-    outline-none 
-    ring-2 
-    ring-blue-500 
-    ring-opacity-50;
-}
+/* Focus States */  
+*:focus {  
+  @apply outline-none ring-2 ring-blue-500 ring-opacity-50;  
+}  
 
-/* Reduce Motion Preference */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    @apply transition-none;
-  }
-}
+/* Reduce Motion Preference */  
+@media (prefers-reduced-motion: reduce) {  
+  * {  
+    @apply transition-none;  
+  }  
+}  
 
-/* Accessibility Enhancements */
-::selection {
-  @apply 
-    bg-blue-500 
-    text-white 
-    bg-opacity-80;
-}
+/* Accessibility Enhancements */  
+::selection {  
+  @apply bg-blue-500 text-white bg-opacity-80;  
+}  
 
-/* Typography Base */
-p, span, div {
-  @apply 
-    leading-relaxed 
-    tracking-normal;
-}
+/* Typography Base */  
+p, span, div {  
+  @apply leading-relaxed tracking-normal;  
+}  
 
-/* Input and Form Elements */
-input, textarea, button, select {
-  @apply 
-    transition-all 
-    duration-200 
-    ease-in-out 
-    focus:border-blue-500 
-    focus:ring-2 
-    focus:ring-blue-300 
-    dark:focus:ring-blue-700;
-}
+/* Input and Form Elements */  
+input, textarea, button, select {  
+  @apply   
+    transition-all duration-200 ease-in-out   
+    focus:border-blue-500   
+    focus:ring-2 focus:ring-blue-300   
+    dark:focus:ring-blue-700;  
+}  
 
-/* Subtle Animations */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
+/* Subtle Animations */  
+@keyframes fadeIn {  
+  from { opacity: 0; }  
+  to { opacity: 1; }  
+}  
 
-.animate-fade-in {
-  animation: fadeIn 0.3s ease-out;
-}
+.animate-fade-in {  
+  animation: fadeIn 0.3s ease-out;  
+}  
+
+/* === Responsive Typography === */  
+h1 {  
+  @apply text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold;  
+}  
+
+h2 {  
+  @apply text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold;  
+}  
+
+p {  
+  @apply text-sm sm:text-base md:text-lg lg:text-xl;  
+}  
+
+/* === Mobile-Friendly Layout === */  
+.container {  
+  @apply mx-auto px-4 sm:px-6 md:px-8;  
+}  
+
+/* === Responsive Flexbox for Layouts === */  
+.flex-container {  
+  @apply flex flex-col md:flex-row gap-4;  
+}  
+
+/* === Mobile Navigation Menu === */  
+.navbar {  
+  @apply flex flex-col md:flex-row justify-between items-center bg-gray-800 text-white p-4;  
+}  
+
+.nav-item {  
+  @apply p-2 text-sm sm:text-base hover:bg-gray-700 rounded;  
+}  
+
+/* === Responsive Buttons === */  
+.button {  
+  @apply px-4 py-2 text-sm sm:text-base md:text-lg rounded bg-blue-500 text-white hover:bg-blue-600;  
+}  
+
+/* === Adjust Grid Layout for Small Screens === */  
+.grid-layout {  
+  @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4;  
+}  
+  
