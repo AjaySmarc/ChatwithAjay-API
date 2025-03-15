@@ -5,36 +5,28 @@ import { materialLight, materialDark } from 'react-syntax-highlighter/dist/esm/s
 const ResponseDisplay = ({ conversation, isLoading, isDarkMode }) => {
   const containerRef = useRef(null);
 
-  // Scroll to top when new response is added
+  // Auto-scroll to top when new response is added
   useEffect(() => {
     if (containerRef.current) {
       containerRef.current.scrollTop = 0;
     }
-  }, [conversation]);
+  }, [conversation.length]); // Depend only on conversation length to optimize re-renders
 
-  // Copy text to clipboard
-  const copyToClipboard = (text, event) => {
-    navigator.clipboard.writeText(text);
-    const copyButton = event.target;
-    copyButton.textContent = 'Copied!';
-    setTimeout(() => {
-      copyButton.textContent = 'Copy';
-    }, 2000);
-  };
-
-  // Parse text for code blocks
   const parseCodeBlocks = (text) => {
     const codeBlockRegex = /```(\w+)?\n([\s\S]*?)```/g;
     const parts = [];
     let lastIndex = 0;
 
-    text.replace(codeBlockRegex, (match, lang, code, offset) => {
+    for (const match of text.matchAll(codeBlockRegex)) {
+      const [fullMatch, lang, code] = match;
+      const offset = match.index;
+
       if (offset > lastIndex) {
         parts.push({ type: 'text', content: text.slice(lastIndex, offset) });
       }
-      parts.push({ type: 'code', language: lang || 'javascript', content: code });
-      lastIndex = offset + match.length;
-    });
+      parts.push({ type: 'code', language: lang || 'javascript', content: code.trim() });
+      lastIndex = offset + fullMatch.length;
+    }
 
     if (lastIndex < text.length) {
       parts.push({ type: 'text', content: text.slice(lastIndex) });
@@ -44,7 +36,7 @@ const ResponseDisplay = ({ conversation, isLoading, isDarkMode }) => {
   };
 
   return (
-    <div ref={containerRef} className="pt-4 pb-16 px-4 overflow-y-auto max-h-screen">
+    <div ref={containerRef} className="pt-4 pb-20 px-4 overflow-y-auto max-h-screen">
       {conversation.map((entry, index) => (
         <div key={index} className="bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden mb-4">
           <div className="bg-blue-50 dark:bg-blue-900 p-4 border-b">
@@ -55,14 +47,16 @@ const ResponseDisplay = ({ conversation, isLoading, isDarkMode }) => {
               part.type === 'text' ? (
                 <p key={i} className="text-gray-700 dark:text-gray-200">{part.content}</p>
               ) : (
-                <SyntaxHighlighter key={i} language={part.language} style={isDarkMode ? materialDark : materialLight} className="rounded-lg">
-                  {part.content.trim()}
+                <SyntaxHighlighter
+                  key={i}
+                  language={part.language}
+                  style={isDarkMode ? materialDark : materialLight}
+                  className="rounded-lg"
+                >
+                  {part.content}
                 </SyntaxHighlighter>
               )
             )}
-            <button onClick={(e) => copyToClipboard(entry.answer, e)} className="text-blue-500 text-sm mt-2">
-              Copy
-            </button>
           </div>
         </div>
       ))}
@@ -74,4 +68,3 @@ const ResponseDisplay = ({ conversation, isLoading, isDarkMode }) => {
 };
 
 export default ResponseDisplay;
-        
