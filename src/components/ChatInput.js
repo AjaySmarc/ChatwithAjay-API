@@ -21,6 +21,7 @@ const ChatInput = ({
       'application/pdf', 'image/webp', 'image/svg+xml'
     ];
     const maxSize = 10 * 1024 * 1024; // 10MB
+    const minSize = 1 * 1024; // 1KB
 
     if (!allowedTypes.includes(file.type)) {
       toast.error('Unsupported file type');
@@ -30,11 +31,15 @@ const ChatInput = ({
       toast.error('File too large (max 10MB)');
       return false;
     }
+    if (file.size < minSize) {
+      toast.error('File too small');
+      return false;
+    }
 
     return true;
   };
 
-  // Handle file selection
+  // File Change Handler
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file && validateFile(file)) {
@@ -44,7 +49,7 @@ const ChatInput = ({
     }
   };
 
-  // Remove file
+  // Remove Attached File
   const handleFileRemove = () => {
     setAttachedFile(null);
     if (fileInputRef.current) {
@@ -62,14 +67,17 @@ const ChatInput = ({
     });
   };
 
-  // Handle Submit
+  // Submit Handler
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsVoiceInputActive(false);
     
-    if (!question.trim() && !attachedFile) return;
-    if (question.length > 1000) {
-      toast.error('Question too long. Max 1000 characters.');
+    setIsVoiceInputActive(false); // Deactivate voice input
+
+    const trimmedQuestion = question.trim();
+    if (!trimmedQuestion && !attachedFile) return;
+
+    if (trimmedQuestion.length > 1000) {
+      toast.error('Question is too long. Maximum 1000 characters.');
       return;
     }
 
@@ -78,18 +86,21 @@ const ChatInput = ({
       let result;
       if (attachedFile) {
         const fileContent = await readFileAsBase64(attachedFile);
-        result = await GeminiService.generateAnswerWithFile(question, fileContent);
+        result = await GeminiService.generateAnswerWithFile(
+          trimmedQuestion, fileContent
+        );
       } else {
-        result = await GeminiService.generateAnswer(question);
+        result = await GeminiService.generateAnswer(trimmedQuestion);
       }
-
+      
       if (result.success) {
-        onNewQuestion(question, result.answer);
+        onNewQuestion(trimmedQuestion, result.answer);
       } else {
-        toast.error(result.error || "Unexpected error.");
+        toast.error(result.error || "Unexpected error occurred.");
+        onNewQuestion(trimmedQuestion, result.error || "Error");
       }
     } catch (error) {
-      toast.error("Error occurred. Try again.");
+      toast.error("An unexpected error occurred. Please try again.");
     } finally {
       setIsLoading(false);
       setQuestion('');
@@ -97,41 +108,75 @@ const ChatInput = ({
     }
   };
 
+  // Handle key press to submit on Enter
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !isVoiceInputActive) {
+      handleSubmit(e);
+    }
+  };
+
   return (
-    <div className="fixed bottom-0 left-0 w-full bg-white dark:bg-gray-800 p-4 shadow-md border-t">
-      <form onSubmit={handleSubmit} className="flex items-center gap-3">
-        {/* Attach File Button */}
-        <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept="image/*,application/pdf"/>
-        <button type="button" onClick={() => fileInputRef.current?.click()} className="p-2 bg-gray-200 dark:bg-gray-700 rounded">
-          📎
-        </button>
+    <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 p-4 
+                    shadow-lg border-t border-gray-200 dark:border-gray-700">
+      <form onSubmit={handleSubmit} className="space-y-3">
+        <div className="flex flex-col sm:flex-row items-center gap-3">
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            className="hidden"
+            accept="image/jpeg,image/png,image/gif,application/pdf,image/webp,image/svg+xml"
+          />
 
-        {/* File Preview */}
-        {attachedFile && (
-          <div className="bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded flex items-center">
-            <span className="text-sm">{attachedFile.name}</span>
-            <button type="button" onClick={handleFileRemove} className="ml-2 text-red-500">✕</button>
-          </div>
-        )}
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            className="p-2 bg-gray-200 dark:bg-gray-700 rounded 
+                       hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+            aria-label="Attach File"
+          >
+            📎
+          </button>
 
-        {/* Text Input */}
-        <input
-          type="text"
-          value={question}
-          onChange={(e) => setQuestion(e.target.value)}
-          placeholder="Ask a question..."
-          maxLength={1000}
-          className="flex-grow px-4 py-2 border dark:border-gray-600 rounded-lg"
-          disabled={isVoiceInputActive}
-        />
+          {attachedFile && (
+            <div className="flex items-center bg-blue-50 dark:bg-blue-900/30 
+                            px-2 py-1 rounded">
+              <span className="text-sm truncate">{attachedFile.name}</span>
+              <button type="button" onClick={handleFileRemove} className="ml-2 text-red-500 hover:text-red-700">✕</button>
+            </div>
+          )}
 
-        {/* Send Button */}
-        <button type="submit" disabled={isLoading || isVoiceInputActive} className="bg-blue-500 text-white px-4 py-2 rounded">
-          Send
-        </button>
+          <VoiceInput
+            onNewQuestion={onNewQuestion}
+            setIsLoading={setIsLoading}
+            onPauseOrTerminate={onPauseOrTerminate}
+            onActivate={() => setIsVoiceInputActive(true)}
+            onDeactivate={() => setIsVoiceInputActive(false)}
+          />
+
+          <input
+            type="text"
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
+            onKeyPress={handleKeyPress}
+            placeholder="Ask a question..."
+            maxLength={1000}
+            className="flex-grow px-4 py-2 border rounded-lg w-full"
+            disabled={isVoiceInputActive}
+          />
+
+          {isGenerating && onPauseOrTerminate && (
+            <button type="button" onClick={onPauseOrTerminate} className="ml-2 p-2 bg-red-500 text-white rounded">⏹️ Stop</button>
+          )}
+
+          <button type="submit" disabled={isLoading || isVoiceInputActive} className="bg-blue-500 text-white px-4 py-2 rounded">
+            Send
+          </button>
+        </div>
       </form>
     </div>
   );
 };
 
 export default ChatInput;
+            
