@@ -1,19 +1,19 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { materialLight, materialDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 const ResponseDisplay = ({ conversation, isLoading, isDarkMode }) => {
   const containerRef = useRef(null);
 
-  // Scroll to top when new response is added
+  // Auto-scroll to the bottom
   useEffect(() => {
     if (containerRef.current) {
-      containerRef.current.scrollTop = 0;
+      containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
-  }, [conversation]);
+  }, [conversation, isLoading]);
 
   // Copy text to clipboard
-  const copyToClipboard = (text, event) => {
+  const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
     const copyButton = event.target;
     copyButton.textContent = 'Copied!';
@@ -32,6 +32,7 @@ const ResponseDisplay = ({ conversation, isLoading, isDarkMode }) => {
       if (offset > lastIndex) {
         parts.push({ type: 'text', content: text.slice(lastIndex, offset) });
       }
+
       parts.push({ type: 'code', language: lang || 'javascript', content: code });
       lastIndex = offset + match.length;
     });
