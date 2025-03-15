@@ -121,7 +121,7 @@ const ChatInput = ({
           onChange={(e) => setQuestion(e.target.value)}
           placeholder="Ask a question..."
           maxLength={1000}
-          className="flex-grow px-4 py-2 border dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+          className="flex-grow px-4 py-2 border dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-300"
           disabled={isVoiceInputActive}
         />
 
