@@ -45,7 +45,7 @@ const ResponseDisplay = ({ conversation, isLoading, isDarkMode }) => {
   };
 
   return (
-    <div ref={containerRef} className="pt-4 pb-16 px-4 overflow-y-auto max-h-screen">
+    <div ref={containerRef} className="flex flex-col flex-grow overflow-y-auto pt-4 pb-20 px-4">
       {conversation.map((entry, index) => (
         <div key={index} className="bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden mb-4">
           <div className="bg-blue-50 dark:bg-blue-900 p-4 border-b">
