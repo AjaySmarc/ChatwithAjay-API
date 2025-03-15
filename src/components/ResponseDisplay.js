@@ -13,7 +13,7 @@ const ResponseDisplay = ({ conversation, isLoading, isDarkMode }) => {
   }, [conversation, isLoading]);
 
   // Copy text to clipboard
-  const copyToClipboard = (text) => {
+  const copyToClipboard = (text, event) => {
     navigator.clipboard.writeText(text);
     const copyButton = event.target;
     copyButton.textContent = 'Copied!';
